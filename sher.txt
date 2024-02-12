@@ -1,6 +1,7 @@
 User
 Id
 Name
+Email
 Image
 role
 Password
