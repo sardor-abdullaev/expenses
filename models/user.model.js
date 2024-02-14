@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
+const bcrypt = require("bcrypt");
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -13,7 +14,6 @@ const userSchema = new mongoose.Schema({
     lowercase: true,
     validate: [validator.isEmail, "Please provide valid email"],
   },
-  photo: String,
   role: {
     type: String,
     enum: ["admin", "user"],
@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: [true, "Please provide password"],
-    minlength: 8,
+    minlength: 6,
     select: false,
   },
   passwordConfirm: {
@@ -35,4 +35,10 @@ const userSchema = new mongoose.Schema({
       message: "Passwords are not the same",
     },
   },
+});
+
+userSchema.pre("save", async function (next) {
+  this.password = await bcrypt.hash(this.password, 12);
+  this.passwordConfirm = undefined;
+  next();
 });
