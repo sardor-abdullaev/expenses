@@ -1,6 +1,7 @@
 const User = require("../models/user.model");
 const catchAsync = require("../utils/catchAsync");
 const jwt = require("jsonwebtoken");
+const AppError = require("../utils/appError");
 
 const signToken = (id) =>
   jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -47,14 +48,14 @@ exports.login = catchAsync(async (req, res, next) => {
 
   //   1) check if email and password exist
   if (!email || !password) {
-    return next(new Error("Please  provide email and password"));
+    return next(new AppError("Please  provide email and password"));
   }
 
   //   2) check if user exist && password is correct
   const user = await User.findOne({ email }).select("+password");
 
   if (!user || !(await user.correctPassword(password, user.password))) {
-    return next(new Error("Incorrect email or password", 401));
+    return next(new AppError("Incorrect email or password", 401));
   }
   //   3) if everything ok, send token to client
   createSendToken(user, 200, res);
