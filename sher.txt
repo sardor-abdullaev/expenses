@@ -7,14 +7,13 @@ role
 Password
 PasswordConfirm
 
-Goods
+Items
 Id 
 Name
 image
 
-outgoings
-goods_id
+Expense
+item_id
 user_id
 date
-amount
-price_one
+price
