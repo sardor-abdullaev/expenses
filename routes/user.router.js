@@ -28,6 +28,19 @@ router
   .route("/updateMyPassword")
   .patch(authController.protect, authController.updatePassword);
 
-router.route("/:id").get(userController.getUser);
+router
+  .route("/:id")
+  .get(
+    authController.protect,
+    authController.restictTo("admin"),
+    userController.getUser
+  );
+
+router.route(
+  "/me",
+  authController.protect,
+  userController.getMe,
+  userController.getUser
+);
 
 module.exports = router;
