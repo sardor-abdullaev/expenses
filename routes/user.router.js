@@ -7,40 +7,22 @@ const router = express.Router();
 router.post("/signup", authController.signup);
 router.post("/login", authController.login);
 
+router.use(authController.protect);
+
+router.route("/me", userController.getMe, userController.getUser);
+router.route("/updateMyPassword").patch(authController.updatePassword);
+
+router.use(authController.restictTo("admin"));
+
 router
   .route("/")
-  .get(
-    authController.protect,
-    authController.restictTo("admin"),
-    userController.getAllUsers
-  )
+  .get(userController.getAllUsers)
   .post(userController.createUser);
 
 router
   .route("/resetDefaultPassword")
-  .patch(
-    authController.protect,
-    authController.restictTo("admin"),
-    authController.resetToDefaultPassword
-  );
+  .patch(authController.resetToDefaultPassword);
 
-router
-  .route("/updateMyPassword")
-  .patch(authController.protect, authController.updatePassword);
-
-router
-  .route("/:id")
-  .get(
-    authController.protect,
-    authController.restictTo("admin"),
-    userController.getUser
-  );
-
-router.route(
-  "/me",
-  authController.protect,
-  userController.getMe,
-  userController.getUser
-);
+router.route("/:id").get(userController.getUser);
 
 module.exports = router;
