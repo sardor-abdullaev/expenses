@@ -21,16 +21,16 @@ const expenseSchema = new mongoose.Schema({
   },
 });
 
-expenseSchema.pre(/^find/, function (next) {
-  this.populate({
-    path: "item",
-    select: "name",
-  }).populate({
-    path: "user",
-    select: "name email role",
-  });
-  next();
-});
+// expenseSchema.pre(/^find/, function (next) {
+//   this.populate({
+//     path: "item",
+//     select: "name",
+//   }).populate({
+//     path: "user",
+//     select: "name email role",
+//   });
+//   next();
+// });
 
 const Expense = mongoose.model("Expense", expenseSchema);
 module.exports = Expense;

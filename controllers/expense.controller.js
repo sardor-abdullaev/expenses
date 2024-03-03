@@ -3,12 +3,21 @@ const AppError = require("../utils/appError");
 const catchAsync = require("../utils/catchAsync");
 
 exports.restrict = catchAsync(async (req, res, next) => {
-  const currentExpense = await Expense.find({ id: req.params.id });
+  const currentExpense = await Expense.findById(req.params.id);
+  // console.log(
+  //   currentExpense.user,
+  //   req.user.id,
+  //   currentExpense.user.toString() === req.user.id
+  // );
   if (!currentExpense) {
     return next(new AppError("No expense found with that id", 404));
   }
 
-  if (!currentExpense.user == req.user.id || !req.user.role == "admin") {
+  if (
+    !(
+      currentExpense.user.toString() === req.user.id || req.user.role == "admin"
+    )
+  ) {
     return next(
       new AppError("You do not permission to perform this action", 403)
     );
@@ -39,15 +48,15 @@ exports.setUserIdAndDate = (req, res, next) => {
 };
 
 exports.getAllExpenses = catchAsync(async (req, res, next) => {
-  const expenses = await Expense.find();
-  // .populate({
-  //   path: "item",
-  //   select: "name",
-  // })
-  // .populate({
-  //   path: "user",
-  //   select: "-__v",
-  // });
+  const expenses = await Expense.find()
+    .populate({
+      path: "item",
+      select: "name",
+    })
+    .populate({
+      path: "user",
+      select: "-__v",
+    });
 
   res.status(200).json({
     status: "success",
