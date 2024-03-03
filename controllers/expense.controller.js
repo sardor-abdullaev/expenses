@@ -67,6 +67,17 @@ exports.getAllExpenses = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.getExpense = catchAsync(async (req, res, next) => {
+  const expenseOne = await Expense.findById(req.params.id);
+  if (!expenseOne) {
+    return next(new AppError("No expense found with that id", 404));
+  }
+
+  res.status(200).json({
+    expense: expenseOne,
+  });
+});
+
 exports.deleteExpense = catchAsync(async (req, res, next) => {
   const deletedExpense = await Expense.findByIdAndDelete(req.params.id);
 

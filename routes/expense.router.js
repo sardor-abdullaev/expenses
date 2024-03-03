@@ -15,6 +15,7 @@ router
 
 router
   .route("/:id")
+  .get(expenseController.getExpense)
   .patch(
     authController.protect,
     expenseController.restrict,
