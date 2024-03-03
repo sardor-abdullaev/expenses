@@ -9,8 +9,8 @@ router.post("/login", authController.login);
 
 router.use(authController.protect);
 
-router.route("/me", userController.getMe, userController.getUser);
-router.route("/updateMyPassword").patch(authController.updatePassword);
+router.get("/me", userController.getMe, userController.getUser);
+router.patch("/updateMyPassword", authController.updatePassword);
 
 router.use(authController.restictTo("admin"));
 
