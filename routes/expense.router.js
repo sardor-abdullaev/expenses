@@ -9,8 +9,23 @@ router
   .get(expenseController.getAllExpenses)
   .post(
     authController.protect,
-    expenseController.setUserId,
+    expenseController.setUserIdAndDate,
     expenseController.createExpense
+  );
+
+router
+  .route("/:id")
+  .patch(
+    authController.protect,
+    expenseController.restrict,
+    expenseController.setUserIdAndDate,
+    expenseController.updateExpense
+  )
+  .delete(
+    authController.protect,
+    expenseController.restrict,
+    expenseController.setUserIdAndDate,
+    expenseController.deleteExpense
   );
 
 module.exports = router;
